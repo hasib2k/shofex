@@ -1,0 +1,136 @@
+.order-detail-page {
+  padding: 40px 20px;
+}
+
+.order-detail-page > .btn {
+  margin-bottom: 20px;
+}
+
+.order-detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 30px;
+  padding: 20px;
+}
+
+.order-detail-header h1 {
+  margin-bottom: 10px;
+}
+
+.order-status {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-end;
+}
+
+.order-detail-content {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 30px;
+}
+
+.order-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.order-items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.order-item-detail {
+  display: grid;
+  grid-template-columns: 80px 1fr auto;
+  gap: 15px;
+  align-items: center;
+  padding: 15px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+}
+
+.order-item-detail img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.item-info h4 {
+  margin-bottom: 5px;
+}
+
+.item-info p {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 3px 0;
+}
+
+.item-subtotal {
+  font-weight: bold;
+  font-size: 18px;
+  color: var(--primary-color);
+}
+
+.order-summary-sidebar {
+  position: sticky;
+  top: 100px;
+  height: fit-content;
+}
+
+.summary-rows {
+  margin-bottom: 20px;
+}
+
+.summary-rows .summary-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.summary-rows .summary-row.total {
+  font-size: 20px;
+  font-weight: bold;
+  border-bottom: none;
+  margin-top: 10px;
+}
+
+.payment-method, .transaction-id {
+  padding-top: 15px;
+  border-top: 1px solid var(--border-color);
+  margin-top: 15px;
+}
+
+.payment-method h4, .transaction-id h4 {
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+@media (max-width: 968px) {
+  .order-detail-header {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .order-status {
+    align-items: flex-start;
+  }
+  
+  .order-detail-content {
+    grid-template-columns: 1fr;
+  }
+  
+  .order-item-detail {
+    grid-template-columns: 60px 1fr;
+  }
+  
+  .item-subtotal {
+    grid-column: 2;
+  }
+}

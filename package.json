@@ -1,0 +1,19 @@
+{
+  "name": "digital-ecommerce",
+  "version": "1.0.0",
+  "description": "Full-stack e-commerce platform for Digital E-Commerce",
+  "main": "index.js",
+  "scripts": {
+    "server": "cd backend && npm start",
+    "client": "cd frontend && npm start",
+    "admin": "cd admin && npm start",
+    "dev": "concurrently \"npm run server\" \"npm run client\" \"npm run admin\"",
+    "install-all": "npm install && cd backend && npm install && cd ../frontend && npm install && cd ../admin && npm install"
+  },
+  "keywords": ["ecommerce", "react", "node", "mongodb"],
+  "author": "Digital E-Commerce",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

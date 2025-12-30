@@ -1,0 +1,36 @@
+.products-page {
+  padding: 20px 0;
+}
+
+.products-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.products-header h1 {
+  font-size: 32px;
+  color: var(--dark-color);
+}
+
+.category-select {
+  padding: 10px 15px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.no-products {
+  text-align: center;
+  padding: 60px 20px;
+  color: #6b7280;
+}
+
+@media (max-width: 768px) {
+  .products-header {
+    flex-direction: column;
+    gap: 15px;
+    align-items: flex-start;
+  }
+}
