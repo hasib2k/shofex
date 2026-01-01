@@ -68,6 +68,7 @@ const OrderDetail = () => {
     return { steps, percent, cancelled: false };
   };
 
+  
   const { steps, percent, cancelled } = getStatusProgress(order.status);
 
   return (

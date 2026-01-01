@@ -33,24 +33,28 @@
 }
 
 .order-card {
-  padding: 20px;
+  padding: 16px;
+  transition: all 0.2s;
   display: block;
   color: inherit;
-  text-decoration: none;
-  background: #ffffff;
-  border-radius: 12px;
-  border: 2px solid #e5e7eb;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-  position: relative;
+  background: white;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.order-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
 }
 
 .order-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
-  padding-bottom: 16px;
-  border-bottom: 1px solid #f3f4f6;
+  align-items: flex-start;
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .order-header h3 {
@@ -63,17 +67,14 @@
 
 .order-date {
   color: #6b7280;
-  font-size: 13px;
-  font-weight: 600;
+  font-size: 14px;
 }
 
 .badge {
-  padding: 6px 14px;
-  border-radius: 50px;
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
 }
 
 .badge-warning {
@@ -102,23 +103,13 @@
 }
 
 .order-items {
-  margin-bottom: 16px;
-  background: #f9fafb;
-  padding: 14px;
-  border-radius: 8px;
+  margin-bottom: 15px;
 }
 
 .order-item {
   padding: 8px 0;
   font-size: 14px;
-  font-weight: 500;
-  color: #374151;
-  border-bottom: 1px solid #e5e7eb;
-}
-
-.order-item:last-child {
-  border-bottom: none;
-  padding-bottom: 0;
+  color: var(--text-color);
 }
 
 .more-items {
@@ -133,15 +124,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-top: 16px;
-  border-top: 1px solid #f3f4f6;
-}
-
-.order-footer-right {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 6px;
+  padding-top: 15px;
+  border-top: 1px solid var(--border-color);
 }
 
 .order-total {
@@ -152,7 +136,7 @@
 }
 
 .payment-status {
-  font-size: 12px;
+  font-size: 14px;
   color: #6b7280;
   font-weight: 600;
   text-transform: uppercase;
