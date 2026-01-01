@@ -45,14 +45,25 @@ const ProductDetail = () => {
   if (!product) return null;
 
   const imageUrl = product.images?.[0]
-    ? `http://localhost:5000${product.images[0]}`
-    : 'https://via.placeholder.com/500';
+    ? (product.images[0].startsWith('http') 
+        ? product.images[0] 
+        : `http://localhost:5000${product.images[0]}`)
+    : 'https://via.placeholder.com/500?text=No+Image';
+
+  const handleImageError = (e) => {
+    e.target.onerror = null;
+    e.target.src = 'https://via.placeholder.com/500?text=Image+Not+Available';
+  };
 
   return (
     <div className="product-detail container">
       <div className="product-detail-content">
         <div className="product-images">
-          <img src={imageUrl} alt={product.name} />
+          <img 
+            src={imageUrl} 
+            alt={product.name}
+            onError={handleImageError}
+          />
         </div>
 
         <div className="product-details">

@@ -7,9 +7,12 @@ import './Products.css';
 
 const Products = () => {
   const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchParams, setSearchParams] = useSearchParams();
+  const [sortBy, setSortBy] = useState('default');
+  const [priceRange, setPriceRange] = useState({ min: '', max: '' });
   const { addToCart } = useCart();
 
   const categoryId = searchParams.get('category') || '';
@@ -23,10 +26,14 @@ const Products = () => {
     loadCategories();
   }, []);
 
+  useEffect(() => {
+    applyFiltersAndSort();
+  }, [products, sortBy, priceRange]);
+
   const loadProducts = async () => {
     try {
       setLoading(true);
-      const params = {};
+      const params = { limit: 100 };
       if (categoryId) params.category = categoryId;
       if (search) params.search = search;
       
@@ -34,124 +41,7 @@ const Products = () => {
       setProducts(response.data.products || []);
     } catch (error) {
       console.error('Error loading products:', error);
-      // Show dummy data when backend is not available
-      const dummyProducts = [
-        {
-          _id: '1',
-          name: 'Wireless Bluetooth Headphones',
-          description: 'Premium noise-cancelling wireless headphones with 30-hour battery life and crystal clear sound quality.',
-          price: 4500,
-          comparePrice: 6000,
-          images: ['https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500'],
-          category: '1'
-        },
-        {
-          _id: '2',
-          name: 'Smart Watch Pro',
-          description: 'Advanced fitness tracking smartwatch with heart rate monitor, GPS, and 5-day battery life.',
-          price: 8500,
-          comparePrice: 10000,
-          images: ['https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500'],
-          category: '1'
-        },
-        {
-          _id: '3',
-          name: 'Casual Cotton T-Shirt',
-          description: 'Comfortable 100% cotton t-shirt available in multiple colors. Perfect for everyday wear.',
-          price: 599,
-          comparePrice: 899,
-          images: ['https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500'],
-          category: '2'
-        },
-        {
-          _id: '4',
-          name: 'Designer Backpack',
-          description: 'Stylish and durable laptop backpack with multiple compartments and water-resistant material.',
-          price: 2500,
-          comparePrice: 3500,
-          images: ['https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=500'],
-          category: '2'
-        },
-        {
-          _id: '5',
-          name: 'Modern Table Lamp',
-          description: 'Elegant LED table lamp with adjustable brightness and modern minimalist design.',
-          price: 1800,
-          comparePrice: 2500,
-          images: ['https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=500'],
-          category: '3'
-        },
-        {
-          _id: '6',
-          name: 'Decorative Wall Clock',
-          description: 'Vintage-style wall clock with silent movement. Perfect accent piece for any room.',
-          price: 1200,
-          comparePrice: 1800,
-          images: ['https://images.unsplash.com/photo-1563861826100-9cb868fdbe1c?w=500'],
-          category: '3'
-        },
-        {
-          _id: '7',
-          name: 'The Art of Programming',
-          description: 'Comprehensive guide to modern programming practices and design patterns.',
-          price: 850,
-          comparePrice: 1200,
-          images: ['https://images.unsplash.com/photo-1532012197267-da84d127e765?w=500'],
-          category: '4'
-        },
-        {
-          _id: '8',
-          name: 'Yoga Mat Premium',
-          description: 'Extra thick non-slip yoga mat with carrying strap. Eco-friendly and durable.',
-          price: 1500,
-          comparePrice: 2000,
-          images: ['https://images.unsplash.com/photo-1601925260368-ae2f83cf8b7f?w=500'],
-          category: '5'
-        },
-        {
-          _id: '9',
-          name: 'Wireless Gaming Mouse',
-          description: 'High-precision wireless gaming mouse with RGB lighting and programmable buttons.',
-          price: 3200,
-          comparePrice: 4500,
-          images: ['https://images.unsplash.com/photo-1527814050087-3793815479db?w=500'],
-          category: '1'
-        },
-        {
-          _id: '10',
-          name: 'Denim Jeans',
-          description: 'Classic fit denim jeans with comfortable stretch fabric.',
-          price: 1899,
-          comparePrice: 2500,
-          images: ['https://images.unsplash.com/photo-1542272604-787c3835535d?w=500'],
-          category: '2'
-        },
-        {
-          _id: '11',
-          name: 'Ceramic Coffee Mug Set',
-          description: 'Set of 4 elegant ceramic coffee mugs with modern design.',
-          price: 990,
-          comparePrice: 1500,
-          images: ['https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?w=500'],
-          category: '3'
-        },
-        {
-          _id: '12',
-          name: 'Bestseller Novel Collection',
-          description: 'Box set of 3 bestselling novels from top authors.',
-          price: 1299,
-          comparePrice: 1800,
-          images: ['https://images.unsplash.com/photo-1512820790803-83ca734da794?w=500'],
-          category: '4'
-        }
-      ];
-      
-      // Filter by category if selected
-      if (categoryId) {
-        setProducts(dummyProducts.filter(p => p.category === categoryId));
-      } else {
-        setProducts(dummyProducts);
-      }
+      setProducts([]);
     } finally {
       setLoading(false);
     }
@@ -163,16 +53,46 @@ const Products = () => {
       setCategories(response.data.categories || []);
     } catch (error) {
       console.error('Error loading categories:', error);
-      // Show dummy categories when backend is not available
-      setCategories([
-        { _id: '1', name: 'Electronics' },
-        { _id: '2', name: 'Fashion' },
-        { _id: '3', name: 'Home & Living' },
-        { _id: '4', name: 'Books' },
-        { _id: '5', name: 'Sports' },
-        { _id: '6', name: 'Beauty' }
-      ]);
+      setCategories([]);
     }
+  };
+
+  const applyFiltersAndSort = () => {
+    let result = [...products];
+
+    // Filter by price range
+    if (priceRange.min !== '') {
+      result = result.filter(p => p.price >= parseFloat(priceRange.min));
+    }
+    if (priceRange.max !== '') {
+      result = result.filter(p => p.price <= parseFloat(priceRange.max));
+    }
+
+    // Filter out inactive products
+    result = result.filter(p => p.isActive !== false);
+
+    // Sort products
+    switch (sortBy) {
+      case 'price-low':
+        result.sort((a, b) => a.price - b.price);
+        break;
+      case 'price-high':
+        result.sort((a, b) => b.price - a.price);
+        break;
+      case 'name-asc':
+        result.sort((a, b) => a.name.localeCompare(b.name));
+        break;
+      case 'name-desc':
+        result.sort((a, b) => b.name.localeCompare(a.name));
+        break;
+      case 'newest':
+        result.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        break;
+      default:
+        break;
+    }
+
+    setFilteredProducts(result);
   };
 
   const handleCategoryChange = (catId) => {
@@ -184,41 +104,110 @@ const Products = () => {
     setSearchParams(searchParams);
   };
 
+  const handlePriceFilter = () => {
+    applyFiltersAndSort();
+  };
+
+  const clearFilters = () => {
+    setPriceRange({ min: '', max: '' });
+    setSortBy('default');
+    searchParams.delete('category');
+    setSearchParams(searchParams);
+  };
+
   return (
     <div className="products-page container">
       <div className="products-header">
-        <h1>Products</h1>
-        <div className="filters">
-          <select
-            value={categoryId}
-            onChange={(e) => handleCategoryChange(e.target.value)}
-            className="category-select"
-          >
-            <option value="">All Categories</option>
-            {categories.map(cat => (
-              <option key={cat._id} value={cat._id}>{cat.name}</option>
-            ))}
-          </select>
+        <h1>Products ({filteredProducts.length})</h1>
+        <div className="header-actions">
+          <button onClick={clearFilters} className="btn-clear-filters">
+            Clear Filters
+          </button>
         </div>
       </div>
 
-      {loading ? (
-        <div className="loading"><div className="spinner"></div></div>
-      ) : products.length === 0 ? (
-        <div className="no-products">
-          <p>No products found</p>
-        </div>
-      ) : (
-        <div className="products-grid">
-          {products.map(product => (
-            <ProductCard
-              key={product._id}
-              product={product}
-              onAddToCart={() => addToCart(product, 1)}
-            />
-          ))}
-        </div>
-      )}
+      <div className="products-container">
+        <aside className="filters-sidebar">
+          <div className="filter-section">
+            <h3>Category</h3>
+            <select
+              value={categoryId}
+              onChange={(e) => handleCategoryChange(e.target.value)}
+              className="filter-select"
+            >
+              <option value="">All Categories</option>
+              {categories.map(cat => (
+                <option key={cat._id} value={cat._id}>{cat.name}</option>
+              ))}
+            </select>
+          </div>
+
+          <div className="filter-section">
+            <h3>Sort By</h3>
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+              className="filter-select"
+            >
+              <option value="default">Default</option>
+              <option value="price-low">Price: Low to High</option>
+              <option value="price-high">Price: High to Low</option>
+              <option value="name-asc">Name: A to Z</option>
+              <option value="name-desc">Name: Z to A</option>
+              <option value="newest">Newest First</option>
+            </select>
+          </div>
+
+          <div className="filter-section">
+            <h3>Price Range</h3>
+            <div className="price-inputs">
+              <input
+                type="number"
+                placeholder="Min"
+                value={priceRange.min}
+                onChange={(e) => setPriceRange({ ...priceRange, min: e.target.value })}
+                className="price-input"
+              />
+              <span>-</span>
+              <input
+                type="number"
+                placeholder="Max"
+                value={priceRange.max}
+                onChange={(e) => setPriceRange({ ...priceRange, max: e.target.value })}
+                className="price-input"
+              />
+            </div>
+            <button onClick={handlePriceFilter} className="btn-apply-filter">
+              Apply
+            </button>
+          </div>
+        </aside>
+
+        <main className="products-main">
+          {loading ? (
+            <div className="loading"><div className="spinner"></div></div>
+          ) : filteredProducts.length === 0 ? (
+            <div className="no-products">
+              <p>No products found</p>
+              {(categoryId || search || priceRange.min || priceRange.max) && (
+                <button onClick={clearFilters} className="btn-secondary">
+                  Clear all filters
+                </button>
+              )}
+            </div>
+          ) : (
+            <div className="products-grid">
+              {filteredProducts.map(product => (
+                <ProductCard
+                  key={product._id}
+                  product={product}
+                  onAddToCart={() => addToCart(product, 1)}
+                />
+              ))}
+            </div>
+          )}
+        </main>
+      </div>
     </div>
   );
 };

@@ -233,7 +233,12 @@ const ProductForm = () => {
                       style={{
                         width: '100%',
                         height: '100%',
-                        objectFit: 'cover'
+                        objectFit: 'contain',
+                        padding: '8px'
+                      }}
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = 'https://via.placeholder.com/200x200?text=Image+Error';
                       }}
                     />
                     <button

@@ -92,6 +92,7 @@ body {
 .table {
   width: 100%;
   border-collapse: collapse;
+  background: white;
 }
 
 .table th,
@@ -99,11 +100,23 @@ body {
   padding: 12px;
   text-align: left;
   border-bottom: 1px solid #e5e7eb;
+  vertical-align: middle;
 }
 
 .table th {
   font-weight: 600;
   background: #f9fafb;
+  color: #374151;
+  font-size: 14px;
+}
+
+.table td {
+  font-size: 14px;
+  color: #1f2937;
+}
+
+.table tbody tr:hover {
+  background-color: #f9fafb;
 }
 
 .form-group {

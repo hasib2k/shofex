@@ -8,11 +8,20 @@ const ProductCard = ({ product, onAddToCart }) => {
     ? (product.images[0].startsWith('http') ? product.images[0] : `http://localhost:5000${product.images[0]}`)
     : 'https://via.placeholder.com/300x300?text=No+Image';
 
+  const handleImageError = (e) => {
+    e.target.onerror = null;
+    e.target.src = 'https://via.placeholder.com/300x300?text=Image+Not+Available';
+  };
+
   return (
     <div className="product-card">
       <Link to={`/products/${product._id}`}>
         <div className="product-image">
-          <img src={imageUrl} alt={product.name} />
+          <img 
+            src={imageUrl} 
+            alt={product.name}
+            onError={handleImageError}
+          />
           {product.stock < 10 && product.stock > 0 && (
             <span className="badge badge-warning">Only {product.stock} left</span>
           )}

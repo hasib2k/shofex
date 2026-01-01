@@ -14,7 +14,7 @@ const Navbar = () => {
       <div className="container">
         <div className="nav-content">
           <Link to="/" className="logo">
-            <h2>ShofexBD</h2>
+            <h2><span className="brand-orange">Shofex</span><span className="brand-green">BD</span></h2>
           </Link>
 
           <div className="nav-links">

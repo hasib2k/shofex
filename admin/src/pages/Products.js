@@ -42,24 +42,24 @@ const Products = () => {
 
   return (
     <div>
-      <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '20px'}}>
-        <h1>Products</h1>
+      <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px'}}>
+        <h1 style={{margin: 0}}>Products ({products.length})</h1>
         <Link to="/products/new" className="btn btn-primary">
           <FiPlus /> Add Product
         </Link>
       </div>
 
-      <div className="card">
+      <div className="card" style={{overflow: 'auto'}}>
         <table className="table">
           <thead>
             <tr>
-              <th>Image</th>
+              <th style={{width: '70px'}}>Image</th>
               <th>Name</th>
               <th>Category</th>
-              <th>Price</th>
-              <th>Stock</th>
-              <th>Status</th>
-              <th>Actions</th>
+              <th style={{width: '120px'}}>Price</th>
+              <th style={{width: '80px'}}>Stock</th>
+              <th style={{width: '100px'}}>Status</th>
+              <th style={{width: '120px'}}>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -70,7 +70,11 @@ const Products = () => {
                     <img
                       src={product.images[0].startsWith('http') ? product.images[0] : `http://localhost:5000${product.images[0]}`}
                       alt={product.name}
-                      style={{width: '50px', height: '50px', objectFit: 'cover', borderRadius: '4px', border: '1px solid #e5e7eb'}}
+                      style={{width: '50px', height: '50px', objectFit: 'contain', borderRadius: '4px', border: '1px solid #e5e7eb', background: '#f9fafb'}}
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = 'https://via.placeholder.com/50x50?text=No+Image';
+                      }}
                     />
                   ) : (
                     <div style={{
@@ -81,7 +85,9 @@ const Products = () => {
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      color: '#9ca3af'
+                      color: '#9ca3af',
+                      fontSize: '10px',
+                      textAlign: 'center'
                     }}>
                       No Image
                     </div>

@@ -1,10 +1,9 @@
 .navbar {
   background: white;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12);
   position: sticky;
   top: 0;
   z-index: 100;
-  backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--border-color);
 }
 
@@ -12,17 +11,24 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 0;
+  padding: 10px 0;
+  min-height: 50px;
 }
 
 .logo h2 {
-  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  font-size: 28px;
-  font-weight: 700;
+  color: #e53238;
+  font-size: 32px;
+  font-weight: 900;
   letter-spacing: -0.5px;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.logo .brand-orange {
+  color: #ff6b35;
+}
+
+.logo .brand-green {
+  color: #10b981;
 }
 
 .nav-links {
@@ -33,37 +39,25 @@
 
 .nav-link {
   color: var(--text-color);
-  font-weight: 500;
+  font-weight: 400;
+  font-size: 14px;
   display: flex;
   align-items: center;
-  gap: 6px;
-  transition: all 0.3s ease;
+  gap: 5px;
+  transition: all 0.2s ease;
   background: none;
-  padding: 8px 12px;
-  border-radius: 8px;
+  padding: 6px 10px;
+  border-radius: 4px;
   position: relative;
 }
 
 .nav-link:hover {
   color: var(--primary-color);
-  background: rgba(59, 130, 246, 0.1);
-  transform: translateY(-1px);
+  text-decoration: underline;
 }
 
 .nav-link::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 0;
-  height: 2px;
-  background: var(--primary-color);
-  transition: width 0.3s ease;
-}
-
-.nav-link:hover::after {
-  width: 70%;
+  content: none;
 }
 
 .cart-link {
@@ -72,29 +66,20 @@
 
 .cart-badge {
   position: absolute;
-  top: -10px;
-  right: -10px;
-  background: linear-gradient(135deg, var(--danger-color), #dc2626);
+  top: -8px;
+  right: -8px;
+  background: var(--secondary-color);
   color: white;
-  border-radius: 50%;
-  width: 22px;
-  height: 22px;
+  border-radius: 10px;
+  min-width: 18px;
+  height: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 11px;
   font-weight: 700;
-  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4);
-  animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-  0%, 100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.1);
-  }
+  padding: 0 5px;
+  border: 2px solid white;
 }
 
 .btn-link {

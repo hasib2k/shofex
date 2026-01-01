@@ -33,81 +33,10 @@ const Home = () => {
       setBestSellers(bestSellersRes.products || []);
     } catch (error) {
       console.error('Error loading data:', error);
-      // Show dummy data when backend is not available
-      setCategories([
-        { _id: '1', name: 'Electronics' },
-        { _id: '2', name: 'Fashion' },
-        { _id: '3', name: 'Home & Living' },
-        { _id: '4', name: 'Books' },
-        { _id: '5', name: 'Sports' },
-        { _id: '6', name: 'Beauty' }
-      ]);
-      setFeaturedProducts([
-        {
-          _id: '1',
-          name: 'Wireless Bluetooth Headphones',
-          description: 'Premium noise-cancelling wireless headphones',
-          price: 4500,
-          comparePrice: 6000,
-          images: ['https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500']
-        },
-        {
-          _id: '2',
-          name: 'Smart Watch Pro',
-          description: 'Advanced fitness tracking smartwatch',
-          price: 8500,
-          comparePrice: 10000,
-          images: ['https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500']
-        },
-        {
-          _id: '3',
-          name: 'Casual Cotton T-Shirt',
-          description: 'Comfortable 100% cotton t-shirt',
-          price: 599,
-          comparePrice: 899,
-          images: ['https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500']
-        },
-        {
-          _id: '4',
-          name: 'Designer Backpack',
-          description: 'Stylish and durable laptop backpack',
-          price: 2500,
-          comparePrice: 3500,
-          images: ['https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=500']
-        },
-        {
-          _id: '5',
-          name: 'Modern Table Lamp',
-          description: 'Elegant LED table lamp with adjustable brightness',
-          price: 1800,
-          comparePrice: 2500,
-          images: ['https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=500']
-        },
-        {
-          _id: '6',
-          name: 'Decorative Wall Clock',
-          description: 'Vintage-style wall clock with silent movement',
-          price: 1200,
-          comparePrice: 1800,
-          images: ['https://images.unsplash.com/photo-1563861826100-9cb868fdbe1c?w=500']
-        },
-        {
-          _id: '7',
-          name: 'The Art of Programming',
-          description: 'Comprehensive guide to modern programming',
-          price: 850,
-          comparePrice: 1200,
-          images: ['https://images.unsplash.com/photo-1532012197267-da84d127e765?w=500']
-        },
-        {
-          _id: '8',
-          name: 'Yoga Mat Premium',
-          description: 'Extra thick non-slip yoga mat',
-          price: 1500,
-          comparePrice: 2000,
-          images: ['https://images.unsplash.com/photo-1601925260368-ae2f83cf8b7f?w=500']
-        }
-      ]);
+      setFeaturedProducts([]);
+      setCategories([]);
+      setNewArrivals([]);
+      setBestSellers([]);
     } finally {
       setLoading(false);
     }
@@ -130,7 +59,7 @@ const Home = () => {
         </div>
         <div className="container">
           <div className="hero-content">
-            <h1>Welcome to ShofexBD</h1>
+            <h1>Welcome to <span className="brand-orange">Shofex</span><span className="brand-green">BD</span></h1>
             <p>Your trusted online shopping destination</p>
             <Link to="/products" className="btn btn-primary btn-lg">
               Shop Now
@@ -138,6 +67,43 @@ const Home = () => {
           </div>
         </div>
       </section>
+
+      {/* Sliding Featured Products Banner */}
+      {featuredProducts.length > 0 && (
+        <section className="featured-slider-section">
+          <div className="featured-slider-container">
+            <div className="featured-slider-track">
+              {[...featuredProducts.slice(0, 5), ...featuredProducts.slice(0, 5)].map((product, index) => (
+                <Link 
+                  key={`slider-${product._id}-${index}`}
+                  to={`/products/${product._id}`} 
+                  className="featured-slide"
+                >
+                  <div className="featured-slide-image">
+                    <img 
+                      src={product.images?.[0] 
+                        ? (product.images[0].startsWith('http') 
+                            ? product.images[0] 
+                            : `http://localhost:5000${product.images[0]}`)
+                        : 'https://via.placeholder.com/200x150?text=No+Image'
+                      }
+                      alt={product.name}
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = 'https://via.placeholder.com/200x150?text=No+Image';
+                      }}
+                    />
+                  </div>
+                  <div className="featured-slide-info">
+                    <h4>{product.name}</h4>
+                    <p className="featured-slide-price">৳{product.price}</p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Categories Section */}
       <section className="section categories-section">
