@@ -22,6 +22,11 @@ const ProductCard = ({ product, onAddToCart }) => {
             alt={product.name}
             onError={handleImageError}
           />
+          {product.comparePrice && product.comparePrice > product.price && (
+            <span className="badge badge-discount">
+              {Math.round(((product.comparePrice - product.price) / product.comparePrice) * 100)}% OFF
+            </span>
+          )}
           {product.stock < 10 && product.stock > 0 && (
             <span className="badge badge-warning">Only {product.stock} left</span>
           )}
@@ -44,9 +49,6 @@ const ProductCard = ({ product, onAddToCart }) => {
           {product.comparePrice && product.comparePrice > product.price && (
             <>
               <span className="compare-price">৳{product.comparePrice}</span>
-              <span className="discount">
-                {Math.round(((product.comparePrice - product.price) / product.comparePrice) * 100)}% OFF
-              </span>
             </>
           )}
         </div>

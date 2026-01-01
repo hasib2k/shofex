@@ -34,16 +34,6 @@ const Footer = () => {
         
         <div className="footer-bottom">
           <p>&copy; {new Date().getFullYear()} ShofexBD. All rights reserved.</p>
-          <a 
-            href="http://localhost:3001" 
-            target="_blank" 
-            rel="noopener noreferrer" 
-            className="admin-footer-link"
-            title="Admin Panel"
-          >
-            <FiSettings size={18} />
-            Admin Panel
-          </a>
         </div>
       </div>
     </footer>

@@ -47,6 +47,29 @@ const OrderDetail = () => {
 
   const canCancel = ['pending', 'confirmed'].includes(order.status);
 
+  const getStatusProgress = (status) => {
+    const statusOrder = ['pending', 'confirmed', 'processing', 'shipped', 'delivered'];
+    const currentIndex = statusOrder.indexOf(status);
+    
+    if (status === 'cancelled') {
+      return { steps: [{ label: 'Cancelled', active: true, cancelled: true }], percent: 0, cancelled: true };
+    }
+    
+    const steps = [
+      { label: 'Pending', active: currentIndex >= 0 },
+      { label: 'Confirmed', active: currentIndex >= 1 },
+      { label: 'Processing', active: currentIndex >= 2 },
+      { label: 'Shipped', active: currentIndex >= 3 },
+      { label: 'Delivered', active: currentIndex >= 4 }
+    ];
+    
+    const percent = currentIndex >= 0 ? ((currentIndex + 1) / statusOrder.length) * 100 : 0;
+    
+    return { steps, percent, cancelled: false };
+  };
+
+  const { steps, percent, cancelled } = getStatusProgress(order.status);
+
   return (
     <div className="order-detail-page container">
       <button onClick={() => navigate('/orders')} className="btn btn-outline">
@@ -58,13 +81,24 @@ const OrderDetail = () => {
           <h1>Order #{order.orderNumber}</h1>
           <p>Placed on {new Date(order.createdAt).toLocaleString()}</p>
         </div>
-        <div className="order-status">
-          <span className={`badge badge-${order.status}`}>
-            {order.status.toUpperCase()}
-          </span>
-          <span className={`badge badge-${order.paymentStatus}`}>
-            Payment: {order.paymentStatus.toUpperCase()}
-          </span>
+      </div>
+
+      <div className="order-status-tracker card">
+        <h3>Order Status</h3>
+        <div className="status-progress">
+          <div className="progress-bar">
+            <div className={`progress-fill ${cancelled ? 'cancelled' : ''}`} style={{ width: `${percent}%` }}></div>
+          </div>
+          <div className="status-steps">
+            {steps.map((step, index) => (
+              <div key={index} className={`status-step ${step.active ? 'active' : ''} ${step.cancelled ? 'cancelled' : ''}`}>
+                <div className="step-circle">
+                  {step.active && <span>✓</span>}
+                </div>
+                <span className="step-label">{step.label}</span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -73,24 +107,39 @@ const OrderDetail = () => {
           <div className="card">
             <h3>Order Items</h3>
             <div className="order-items-list">
-              {order.items.map(item => (
-                <div key={item._id} className="order-item-detail">
-                  <img
-                    src={item.product?.images?.[0]
-                      ? `http://localhost:5000${item.product.images[0]}`
-                      : 'https://via.placeholder.com/80'}
-                    alt={item.name}
-                  />
-                  <div className="item-info">
-                    <h4>{item.name}</h4>
-                    <p>Quantity: {item.quantity}</p>
-                    <p>Price: ৳{item.price}</p>
+              {order.items.map(item => {
+                let imageUrl = 'https://via.placeholder.com/80?text=No+Image';
+                
+                if (item.product?.images?.[0]) {
+                  const imagePath = item.product.images[0];
+                  // Check if it's an external URL or local path
+                  if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+                    imageUrl = imagePath;
+                  } else {
+                    imageUrl = `http://localhost:5000${imagePath}`;
+                  }
+                }
+                
+                return (
+                  <div key={item._id} className="order-item-detail">
+                    <img
+                      src={imageUrl}
+                      alt={item.name}
+                      onError={(e) => {
+                        e.target.src = 'https://via.placeholder.com/80?text=No+Image';
+                      }}
+                    />
+                    <div className="item-info">
+                      <h4>{item.name}</h4>
+                      <p>Quantity: {item.quantity}</p>
+                      <p>Price: ৳{item.price}</p>
+                    </div>
+                    <div className="item-subtotal">
+                      ৳{item.subtotal}
+                    </div>
                   </div>
-                  <div className="item-subtotal">
-                    ৳{item.subtotal}
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
 
