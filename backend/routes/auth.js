@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
-const { generateToken } = require('../middleware/auth');
+const { generateToken, protect } = require('../middleware/auth');
 const { body, validationResult } = require('express-validator');
 
 // @route   POST /api/auth/register
@@ -115,7 +115,7 @@ router.post('/login', [
 // @route   GET /api/auth/me
 // @desc    Get current user
 // @access  Private
-router.get('/me', require('../middleware/auth').protect, async (req, res) => {
+router.get('/me', protect, async (req, res) => {
   try {
     const user = await User.findById(req.user.id);
     res.json({
@@ -130,6 +130,66 @@ router.get('/me', require('../middleware/auth').protect, async (req, res) => {
       }
     });
   } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// @route   PUT /api/auth/profile
+// @desc    Update user profile
+// @access  Private
+router.put('/profile', protect, [
+  body('name').optional().notEmpty().trim(),
+  body('phone').optional().notEmpty().trim(),
+  body('address').optional()
+], async (req, res) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { name, phone, address } = req.body;
+    
+    // Check if phone is being changed and if it's already taken by another user
+    if (phone) {
+      const existingUser = await User.findOne({ 
+        phone, 
+        _id: { $ne: req.user.id } 
+      });
+      if (existingUser) {
+        return res.status(400).json({ message: 'Phone number already in use' });
+      }
+    }
+
+    // Build update object
+    const updateData = {};
+    if (name) updateData.name = name;
+    if (phone) updateData.phone = phone;
+    if (address) updateData.address = address;
+
+    const user = await User.findByIdAndUpdate(
+      req.user.id,
+      updateData,
+      { new: true, runValidators: true }
+    );
+
+    const token = generateToken(user._id);
+
+    res.json({
+      success: true,
+      message: 'Profile updated successfully',
+      token,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        phone: user.phone,
+        role: user.role,
+        address: user.address
+      }
+    });
+  } catch (error) {
+    console.error(error);
     res.status(500).json({ message: 'Server error' });
   }
 });

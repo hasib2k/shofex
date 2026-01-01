@@ -5,7 +5,7 @@
   box-shadow: 0 1px 2px rgba(0,0,0,0.1);
   transition: all 0.2s ease;
   border: 1px solid #e5e5e5;
-  min-height: 350px;
+  height: 100%;
   display: flex;
   flex-direction: column;
 }
@@ -43,17 +43,27 @@
 .badge {
   position: absolute;
   top: 8px;
-  right: 8px;
-  padding: 4px 8px;
-  border-radius: 3px;
+  left: 8px;
+  padding: 4px 10px;
+  border-radius: 4px;
   font-size: 11px;
   font-weight: 600;
   color: white;
   text-transform: uppercase;
+  z-index: 1;
+  display: inline-block;
+  width: fit-content;
+}
+
+.badge-discount {
+  background: #ef4444;
+  font-size: 11px;
+  font-weight: 700;
 }
 
 .badge-warning {
   background: var(--warning-color);
+  top: 40px;
 }
 
 .badge-danger {
@@ -61,16 +71,20 @@
 }
 
 .badge-featured {
-  background: var(--success-color);
+  background: #fbbf24;
+  top: 40px;
 }
 
 .product-info {
   padding: 12px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 }
 
 .product-name {
   font-size: 14px;
-  margin-bottom: 8px;
+  margin-bottom: auto;
   color: var(--text-color);
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -96,7 +110,7 @@
 }
 
 .compare-price {
-  font-size: 13px;
+  font-size: 12px;
   color: var(--text-secondary);
   text-decoration: line-through;
 }

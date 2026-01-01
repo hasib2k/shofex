@@ -60,9 +60,6 @@ const Orders = () => {
                     {new Date(order.createdAt).toLocaleDateString()}
                   </p>
                 </div>
-                <span className={`badge ${getStatusBadge(order.status)}`}>
-                  {order.status.toUpperCase()}
-                </span>
               </div>
 
               <div className="order-items">
